@@ -1,0 +1,21 @@
+name: Check
+
+on:
+  push:
+    branches:
+      - '*'
+
+jobs:
+  check-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Check Repository Name
+        run: |
+          IFS='/' read -r username repository <<< ${{ github.repository }}
+          if [[ "${repository}" != *"ai-academy-${username}-repository"* ]]; then
+            echo "Repository name "${repository}" is not allowed. Does not match "ai-academy-${username}-repository". Failing workflow."
+            exit 1
+          fi
